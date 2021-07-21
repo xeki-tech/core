@@ -1,0 +1,14 @@
+{
+  "name": "xeki-tech/core",
+  "type": "framework",
+  "description": "Core libs for Xeki framework",
+  "keywords": ["framework","php"],
+  "homepage": "https://xeki.tech/",
+  "minimum-stability": "dev",
+  "htaccess-protect" : true,
+  "config": {
+    "platform": {
+      "php": "8.0.0"
+    }
+  }
+}
