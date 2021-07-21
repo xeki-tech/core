@@ -4,7 +4,7 @@ $_DEFAULT_PAGE_ERROR = '_default_error.php';
 // load base library
 require_once('libs/xeki_util_methods.php');
 require_once('libs/main_core.php');
-$_SYSTEM_PATH_BASE = dirname(__FILE__);
+
 \xeki\core::$SYSTEM_PATH_BASE = $_SYSTEM_PATH_BASE;
 \xeki\core::init();
 
