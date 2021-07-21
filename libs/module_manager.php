@@ -85,9 +85,9 @@ class module_manager
 
     public static function import_module($module_name, $module_config = "main", $custom_variables = array())
     {
-        $_PATH_MODULES = dirname(__FILE__) . "/../../modules";
-        $_PATH_MODULES_VENDOR = dirname(__FILE__) . "/../../libs/vendor";
-        $_PATH_CORE = dirname(__FILE__) . "/../../core/modules_config";
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
+        $_PATH_MODULES_VENDOR = \xeki\core::$SYSTEM_PATH_BASE . "/libs/vendor";
+        $_PATH_CORE = \xeki\core::$SYSTEM_PATH_BASE . "/core/modules_config";
 
         // this help to ux of code :)
         if (is_array($module_config)) {
@@ -115,7 +115,6 @@ class module_manager
 
         // get config of module
         $MODULE_DATA_CONFIG = self::get_config_array($module_name, $module_config, $custom_variables);
-
 
         // exist mail module
         $object = false;
@@ -165,9 +164,12 @@ class module_manager
      */
     public static function xeki_module_get_main($module_name, $module_config = "main", $custom_variables = array())
     {
+        //
         // global methods
-        $_PATH_MODULES = dirname(__FILE__) . "/../../modules";
-        $_PATH_CORE = dirname(__FILE__) . "/../../core/modules_config";
+        //
+
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
+        $_PATH_CORE = \xeki\core::$SYSTEM_PATH_BASE . "/core/modules_config";
         $_MAIN_MODULE = "$_PATH_MODULES/$module_name/main.php";
 
         //
@@ -181,8 +183,6 @@ class module_manager
         // End config block
         //
 
-        //        d($_MAIN_MODULE);
-        //        d($_MAIN_MODULE_CONFIG);
         $AG_MAIN = false;
         if (file_exists($_MAIN_MODULE)) {
             $AG_MAIN = self::getMainModule($module_name, $_MAIN_MODULE, $MODULE_DATA_CONFIG);
@@ -206,8 +206,8 @@ class module_manager
      */
     public static function getMainModule($module_name, $_MAIN_MODULE, $MODULE_DATA_CONFIG)
     {
-        $_PATH_MODULES = dirname(__FILE__) . "/../../modules";
-        $_PATH_MODULES_VENDOR = dirname(__FILE__) . "/../../libs/vendor";
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
+        $_PATH_MODULES_VENDOR = \xeki\core::$SYSTEM_PATH_BASE . "/libs/vendor";
 
         // import config
 
@@ -257,15 +257,14 @@ class module_manager
     public static function get_config_array($module_name, $module_config, $custom_variables)
     {
 
-        $_PATH_MODULES = dirname(__FILE__) . "/../../modules";
-        $_PATH_CORE = dirname(__FILE__) . "/../../core/modules_config";
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
+        $_PATH_CORE = \xeki\core::$SYSTEM_PATH_BASE . "/core/modules_config";
 
         // get module config
         $MODULE_DATA_CONFIG = array();
         $_MAIN_MODULE_CONFIG = false;
-
         if (!$_MAIN_MODULE_CONFIG) {
-            $file_route_module = "{$_PATH_CORE}/{$module_name}/html-twig.php";
+            $file_route_module = "{$_PATH_CORE}/{$module_name}/config.php";
             if (file_exists($file_route_module)) {
                 $_MAIN_MODULE_CONFIG = $file_route_module;
             }
@@ -273,12 +272,11 @@ class module_manager
 
 
         if (!$_MAIN_MODULE_CONFIG) {
-            $file_route_module = "{$_PATH_CORE}/{$module_name}-module/html-twig.php";
+            $file_route_module = "{$_PATH_CORE}/{$module_name}-module/config.php";
             if (file_exists($file_route_module)) {
                 $_MAIN_MODULE_CONFIG = $file_route_module;
             }
         }
-
 
         if ($_MAIN_MODULE_CONFIG !== false) {
             require($_MAIN_MODULE_CONFIG);
@@ -359,7 +357,7 @@ class module_manager
         global $URL_BASE;
 
 
-        $_PATH_MODULES = dirname(__FILE__) . "/../../modules";
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
         $folders_modules = scandir($_PATH_MODULES);
         foreach ($folders_modules as $folder) {
             if ($folder !== '.' && $folder !== '..' && $folder !== '_common')
@@ -413,7 +411,7 @@ class module_manager
         global $URL_BASE;
         global $AG_HTTP_REQUEST;
 
-        $_PATH_MODULES = dirname(__FILE__) . "/../../modules";
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
         // d($_ARRAY_MODULES_TO_LOAD_URLS);
         // get if we have
         // load urls all
