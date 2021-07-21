@@ -221,9 +221,6 @@ class routes
             $controller .= ".php";
 
         \xeki\routes::$vars = $vars;
-        d($_SYSTEM_PATH_BASE);
-        d($module);
-        d("$_SYSTEM_PATH_BASE/$module/controllers/$controller");
         require_once("$_SYSTEM_PATH_BASE/$module/controllers/$controller");
 
         if ($not_found) {
