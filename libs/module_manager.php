@@ -5,11 +5,9 @@
  * Firts Creation
  * User: Luis Eduardo
  * Date: 2/27/2016
- * Time: 9:04 PM
  */
 
 namespace xeki;
-
 
 /**
  * Class module_manager
@@ -85,7 +83,7 @@ class module_manager
 
     public static function import_module($module_name, $module_config = "main", $custom_variables = array())
     {
-        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/modules";
         $_PATH_MODULES_VENDOR = \xeki\core::$SYSTEM_PATH_BASE . "/libs/vendor";
         $_PATH_CORE = \xeki\core::$SYSTEM_PATH_BASE . "/core/modules_config";
 
@@ -108,10 +106,10 @@ class module_manager
 
         // if #modules_config is array run inline config 7
         // load config dfault or custom and rewrite with array gived
-
+        
         $_MAIN_MODULE = "$_PATH_MODULES/$module_name/main.php";
         $_MAIN_MODULE_TRY_1 = "$_PATH_MODULES_VENDOR/xeki-tech/$module_name/main.php";
-        $_MAIN_MODULE_TRY_2 = "$_PATH_MODULES_VENDOR/module/main.php";
+        $_MAIN_MODULE_TRY_2 = "$_PATH_MODULES_VENDOR/$module_name/main.php";
 
         // get config of module
         $MODULE_DATA_CONFIG = self::get_config_array($module_name, $module_config, $custom_variables);
@@ -206,11 +204,10 @@ class module_manager
      */
     public static function getMainModule($module_name, $_MAIN_MODULE, $MODULE_DATA_CONFIG)
     {
-        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/../modules";
+        $_PATH_MODULES = \xeki\core::$SYSTEM_PATH_BASE . "/modules";
         $_PATH_MODULES_VENDOR = \xeki\core::$SYSTEM_PATH_BASE . "/libs/vendor";
 
         // import config
-
         $__module_name = false;
         $__config_path = false;
         $__name_space = false;
@@ -218,7 +215,7 @@ class module_manager
 
         $_config = "$_PATH_MODULES/$module_name/_module.php";
         $_config_TRY_1 = "$_PATH_MODULES_VENDOR/xeki-tech/$module_name/_module.php";
-        $_config_TRY_2 = "$_PATH_MODULES_VENDOR/module/_module.php";
+        $_config_TRY_2 = "$_PATH_MODULES_VENDOR/$module_name/_module.php";
 
 
         $object = false;
@@ -231,9 +228,18 @@ class module_manager
             require($_config_TRY_2);
         }
 
+        if(
+            $__module_name == false &&
+            $__config_path == false &&
+            $__name_space == false
+        ){
+            self::xeki_module_error($module_name . " no module base config");
+        }
+
         if (!class_exists("$__name_space\main", false)) {
             require_once $_MAIN_MODULE;
         }
+
         $class_name = "$__name_space\main";
         $AG_MAIN = new $class_name;
 
@@ -285,40 +291,14 @@ class module_manager
             die();
         }
 
-
-//      OLD MERGE configs default and inner module
-//        $TEMP_MAIN_MODULE = $MODULE_DATA_CONFIG;
-//        $TEMP_MAIN_MODULE = $TEMP_MAIN_MODULE["main"];
-//
-//        #default path custom
-//
-//
-//        #custom TODO create this for
-//        if (file_exists("{$_PATH_CORE}/{$module_name}/html-twig.php")) {
-//            $_MAIN_MODULE_CONFIG = "{$_PATH_CORE}/{$module_name}/html-twig.php";
-//            require($_MAIN_MODULE_CONFIG);
-//        }
-//
-//
-//        $MODULE_DATA_CONFIG = $MODULE_DATA_CONFIG[$modules_config];
-//
-//
-//        $MODULE_DATA_CONFIG = array_merge($TEMP_MAIN_MODULE, $MODULE_DATA_CONFIG);
-        // d($MODULE_DATA_CONFIG);
-
         $MODULE_DATA_CONFIG = $MODULE_DATA_CONFIG[$module_config];
         // load array of custom config
         foreach ($custom_variables as $key => $item) {
             $MODULE_DATA_CONFIG[$key] = $item;
         }
-
-
         return $MODULE_DATA_CONFIG;
     }
 
-    /**
-     *
-     */
     public function launch_xeki_action_method()
     {
         global $AG_MODULES;
