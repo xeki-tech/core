@@ -4,11 +4,9 @@ $_DEFAULT_PAGE_ERROR = '_default_error.php';
 // load base library
 require_once('libs/xeki_util_methods.php');
 require_once('libs/main_core.php');
-
+$_SYSTEM_PATH_BASE = $_SYSTEM_PATH_BASE ?? __DIR__ . './../../../../../app';
 \xeki\core::$SYSTEM_PATH_BASE = $_SYSTEM_PATH_BASE;
 \xeki\core::init();
-
-
 error_reporting(E_ALL);
 function errorHandler()
 {
@@ -34,10 +32,9 @@ set_error_handler('errorHandler');
 register_shutdown_function('errorHandler');
 
 // option origin valid
-
 $_ARRAY_RUN_END = array();
 ## general project
-require_once('core/config.php');
+require_once($_SYSTEM_PATH_BASE . '/core/config.php');
 
 ## CHECK FORCE SSL
 // if is not ssl and
@@ -90,35 +87,47 @@ if (is_countable($COMPRESS_DOMAIN)) {
     }
 }
 
-
 define("DEBUG_MODE", $_DEBUG_MODE, true);
 
 // Enable error reporting from config
 if ($_DEBUG_MODE) error_reporting(E_ALL);
 else error_reporting(0);
 
+## is like a print but for web
 ### url analyzer ----------------------------------
 // URL
-require_once('libs/http_request.php');
-require_once('libs/routes.php');
+require_once(__DIR__ . './libs/http_request.php');
+require_once(__DIR__ . './libs/routes.php');
+
 $AG_HTTP_REQUEST = new \xeki\http_request();
-$path_html = "$_SYSTEM_PATH_BASE/core/pages/";## this update by modules
-$path_cache = sys_get_temp_dir() . "/cache/pages/";## this update by modules
+$path_html = "$_SYSTEM_PATH_BASE/core/pages/"; ## this update by modules
+$path_cache = sys_get_temp_dir() . "/cache/pages/"; ## this update by modules
+
 //  check auto load
-if (!file_exists('libs/vendor/autoload.php')) {
-    d("Run composer, <br>More details https://xeki.io/php/composer");
+if (!file_exists(__DIR__ . './../../autoload.php')) {
+    d("Run composer, <br>More details https://xeki.tech/php/composer");
     die();
 }
-require_once('libs/vendor/autoload.php');
 
+require_once(__DIR__ . './../../autoload.php');
 
 // load Module
-require_once('libs/module_manager.php');
-
+require_once(__DIR__ . '/libs/module_manager.php');
 $MODULE_CORE_PATH = "$_SYSTEM_PATH_BASE/core/";
 
-// Global params for controllers
-$URL_BASE = $html->URL_BASE;
-$URL_BASE_COMPLETE = $html->URL_BASE_COMPLETE;
-$AG_PARAMS = $html->AG_PARAMS;
-$AG_L_PARAM = $html->AG_L_PARAM;
+if ($_RUN_START_MODULES) $AG_MODULES->run_start();
+if (is_array($_ARRAY_RUN_START))
+    foreach ($_ARRAY_RUN_START as $item) {
+        require_once "modules/$item/run_start.php";
+    }
+
+\xeki\module_manager::load_modules_url();
+
+$match = \xeki\routes::process_actions();
+$match = \xeki\routes::process_routes();
+
+if ($_RUN_END_MODULES) $AG_MODULES->run_end();
+if (is_array($_ARRAY_RUN_END))
+    foreach ($_ARRAY_RUN_END as $item) {
+        require_once "modules/$item/run_end.php";
+    }
