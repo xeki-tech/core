@@ -4,7 +4,7 @@ $_DEFAULT_PAGE_ERROR = '_default_error.php';
 // load base library
 require_once('libs/xeki_util_methods.php');
 require_once('libs/main_core.php');
-$_SYSTEM_PATH_BASE = $_SYSTEM_PATH_BASE ?? __DIR__ . './../../../../../app';
+$_SYSTEM_PATH_BASE = $_SYSTEM_PATH_BASE ?? __DIR__ . '/../../../../../app';
 \xeki\core::$SYSTEM_PATH_BASE = $_SYSTEM_PATH_BASE;
 \xeki\core::init();
 error_reporting(E_ALL);
@@ -96,20 +96,20 @@ else error_reporting(0);
 ## is like a print but for web
 ### url analyzer ----------------------------------
 // URL
-require_once(__DIR__ . './libs/http_request.php');
-require_once(__DIR__ . './libs/routes.php');
+require_once(__DIR__ . '/libs/http_request.php');
+require_once(__DIR__ . '/libs/routes.php');
 
 $AG_HTTP_REQUEST = new \xeki\http_request();
 $path_html = "$_SYSTEM_PATH_BASE/core/pages/"; ## this update by modules
 $path_cache = sys_get_temp_dir() . "/cache/pages/"; ## this update by modules
 
 //  check auto load
-if (!file_exists(__DIR__ . './../../autoload.php')) {
+if (!file_exists(__DIR__ . '/../../autoload.php')) {
     d("Run composer, <br>More details https://xeki.tech/php/composer");
     die();
 }
 
-require_once(__DIR__ . './../../autoload.php');
+require_once(__DIR__ . '/../../autoload.php');
 
 // load Module
 require_once(__DIR__ . '/libs/module_manager.php');
