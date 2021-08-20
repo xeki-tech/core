@@ -114,20 +114,3 @@ require_once(__DIR__ . '/../../autoload.php');
 // load Module
 require_once(__DIR__ . '/libs/module_manager.php');
 $MODULE_CORE_PATH = "$_SYSTEM_PATH_BASE/core/";
-
-if ($_RUN_START_MODULES) $AG_MODULES->run_start();
-if (is_array($_ARRAY_RUN_START))
-    foreach ($_ARRAY_RUN_START as $item) {
-        require_once "modules/$item/run_start.php";
-    }
-
-\xeki\module_manager::load_modules_url();
-
-$match = \xeki\routes::process_actions();
-$match = \xeki\routes::process_routes();
-
-if ($_RUN_END_MODULES) $AG_MODULES->run_end();
-if (is_array($_ARRAY_RUN_END))
-    foreach ($_ARRAY_RUN_END as $item) {
-        require_once "modules/$item/run_end.php";
-    }
