@@ -78,7 +78,7 @@ class module_manager
      * Import a module
      * @param $module_name
      * @param string $module_config
-     * @return bool
+     * @return mixed
      */
 
     public static function import_module($module_name, $module_config = "main", $custom_variables = array())
