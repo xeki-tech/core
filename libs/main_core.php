@@ -592,8 +592,11 @@ class core
      * @param $array_json
      * @param bool $utf8
      */
-    static function PrintJson($array_json, $utf8 = true)
+    static function PrintJson($array_json, $response_code = false, $utf8 = true)
     {
+        if ($response_code) {
+            http_response_code($response_code);
+        }
         header('Content-Type: application/json');
         if ($utf8) {
             $array_json = utf8_size($array_json);
@@ -609,8 +612,11 @@ class core
     /**
      * @param $html
      */
-    static function PrintHtml($html)
+    static function PrintHtml($html, $response_code = false, $utf8 = true)
     {
+        if ($response_code) {
+            http_response_code($response_code);
+        }
         header('Content-Type: text/html');
         echo $html;
 
